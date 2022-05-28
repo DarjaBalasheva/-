@@ -1,0 +1,103 @@
+import java.io.*;
+import java.math.*;
+import java.security.*;
+import java.text.*;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.function.*;
+import java.util.regex.*;
+import java.util.stream.*;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
+
+
+
+class Result {
+
+    /*
+     * Complete the 'checkDetailsAreValid' function below.
+     *
+     * The function is expected to return a STRING.
+     * The function accepts following parameters:
+     *  1. STRING accountNumber
+     *  2. STRING bankCode
+     */
+
+    public static String checkDetailsAreValid(String accountNumber, String bankCode) {
+    var code = accountNumber.trim().replace("-", "");
+    
+    if (accountNumber.length() < 11) {
+    code = "0" + accountNumber; }
+    
+    code = code + bankCode;
+
+    int[] index = new int[11];
+    index[0] = 7;
+    index[1] = 3;
+    index[2] = 1;
+    index[3] = 5;
+    index[4] = 2;
+    index[5] = 4;
+    index[6] = 8;
+    index[7] = 6;
+    index[8] = 1;
+    index[9] = 6;
+    index[10] = 5;
+    
+    String[] ABC = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
+    
+    int nrLitera = 10;
+    int[] codeForCheckSum = new int[11];
+    codeForCheckSum[0] = code.charAt(2);
+    codeForCheckSum[1] = code.charAt(3);
+    codeForCheckSum[2] = code.charAt(4);
+    codeForCheckSum[3] = code.charAt(5);
+    codeForCheckSum[4] = code.charAt(6);
+    codeForCheckSum[5] = code.charAt(7);
+    codeForCheckSum[6] = code.charAt(8);
+    codeForCheckSum[7] = 0;
+                            var literaToString = Integer.toString(code.charAt(9));
+                            for (var i = 0; i <= 25; i++) {
+                            if (literaToString == ABC[i]) {
+                            codeForCheckSum[7] = nrLitera; }
+                            nrLitera = nrLitera + i;
+                            }
+    codeForCheckSum[8] = 0;
+                            var literaToString1 = Integer.toString(code.charAt(10));
+                            for (var i = 0; i <= 25; i++) {
+                            if (literaToString1 == ABC[i]) {
+                            codeForCheckSum[8] = nrLitera;}
+                            nrLitera = nrLitera + i;
+                            }
+    codeForCheckSum[9] =  code.charAt(11);
+    codeForCheckSum[10] = code.charAt(12); 
+
+    int checkSum = 0;
+
+    for (var i = 0; i < codeForCheckSum.length; i++) {
+    checkSum = checkSum + (codeForCheckSum[i] * index[i]);    }
+    int firstAndSecondNr = Integer.parseInt(code.substring(0, 2));
+    if (checkSum % firstAndSecondNr != 0) {
+        return "Icorrect code"; }
+    return "correct code";    
+    }
+}
+
+public class Solution {
+    public static void main(String[] args) throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
+
+        String accountNumber = bufferedReader.readLine();
+
+        String bankCode = bufferedReader.readLine();
+
+        String result = Result.checkDetailsAreValid(accountNumber, bankCode);
+
+        bufferedWriter.write(result);
+        bufferedWriter.newLine();
+
+        bufferedReader.close();
+        bufferedWriter.close();
+    }
+}
